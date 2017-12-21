@@ -1,0 +1,26 @@
+Transformations and Actions is nothing but bunch of APIs to process the data and save it back to underlying file systems. Here is the life cycle of Spark applications.
+
+Identify file system
+Understand file format and structure of data (including delimiters – if applicable) and use appropriate API to read the data. Data will be typically stored in distributed in-memory collection called RDD.
+textFile, sequenceFile, objectFile, hadoopFile, newAPIHadoopFile are the functions on Spark Context to read data from different file formats
+Spark also have other APIs to read data from files, which are not covered yet.
+Apply one or more transformations on the data
+Use appropriate Action to write the data back to underlying file system
+Repeat what ever is applicable to process the data as per requirement
+
+
+Actions
+Actions are the ones which will execute the DAG
+converting to array and preview data – collect, take, first, takeSample
+aggregate – reduce, count
+sorting and ranking – top, takeOrdered
+saving – saveAsTextFile, saveAsSequenceFile
+Transformations
+Transformations are the ones which will define the logic to process the data
+Transformations can be row level, aggregations, joins, set operations etc
+mapping – map, flatMap, filter, mapPartitions
+aggregate – reduceByKey, aggregateByKey, groupByKey
+joins – join, leftOuterJoin, rightOuterJoin, cogroup, cartesian
+set operations – union, intersection
+sorting and ranking – sortByKey, groupByKey
+controlling RDD partitions – coalesce, repartition
