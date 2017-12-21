@@ -1,0 +1,49 @@
+Let us explore all the important actions in detail
+
+converting to array and preview data – collect, take, first, takeSample
+aggregate – reduce, count
+sorting and ranking – top, takeOrdered
+saving – saveAsTextFile, saveAsSequenceFile 
+
+We can use APIs such as collect, take, first to preview data
+first – returns first record from rdd. Data type will be inferred from the element
+take – it takes one integer n as parameter and returns first n records from rdd. Data type will be array.
+collect – it converts the RDD to an Array. If the RDD is big, then using collect might take very long time and also might run into out of memory issues
+We typically use these APIs as part of spark-shell to preview or validate the data
+Never use any of these APIs as part of applications that will be deployed in production, unless and until it is inevitable
+On top of take and collect, foreach is used to display the results in readable as well as custom format
+
+Code sample :- 
+
+val path = "<HDFS path>/retail_db"
+
+val rdd = sc.textFile(path + "/orders")
+rdd.first
+rdd.take(10)
+rdd.collect
+rdd.take(10).foreach(println)
+rdd.take(10).foreach(k => println(k.split(",")(0) + "\t" + k.split(",")(1)))
+
+
+We can apply global transformations using APIs such as reduce, top, takeOrdered
+number of invocations = number of elements on RDD
+count can be used to get number of elements
+takeSample can be used to get sample of data
+We can aggregate data using reduce – eg: total, min, max etc
+reduce process the whole data set and returns one value based up on the functionality defined
+reduce takes 2 parameters (eg: total and element).
+We can get top n records, using top and takeOrdered
+top takes n as parameter. It will sort the data in natural descending order and returns top n records
+takeOrdered can be used to sort the data in natural order by applying simple transformations
+To use takeOrdered, either element type with in RDD need to have implicit ordering defined or function used in 2nd parameter should use implicit ordering such as Ordering[Int]
+On top of top and takeOrdered, foreach is used to display the results in readable as well as custom format
+
+Code sample :- 
+
+val path = "<HDFS>/retail_db" 
+val rdd = sc.textFile(path + "/orders")
+rdd.reduce((agg, ele) => {
+  if(agg.split(",")(2).toInt < ele.split(",")(2).toInt) agg else ele
+  })
+rdd.top(2)
+rdd.takeOrdered(5)(Ordering[Int].reverse.on(x => x.split(",")(2).toInt)).foreach(println)
